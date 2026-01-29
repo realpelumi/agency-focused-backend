@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { z } from "zod";
+import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -16,27 +16,8 @@ app.get("/health", (req, res) => {
   res.json({ ok: true, message: "API is running" });
 });
 
-const contactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  message: z.string().min(10),
-});
-
-// Contact form endpoint
-app.post("/api/contact", (req, res) => {
-  const parsed = contactSchema.safeParse(req.body);
-  if (!parsed.success) {
-    return res.status(400).json({
-      ok: false,
-      errors: parsed.error.flatten(),
-    });
-  }
-
-  // For the test: log + return success (later we will save to DB)
-  console.log("New contact:", parsed.data);
-
-  return res.json({ ok: true, message: "Message received" });
-});
+// API routes
+app.use("/api/contact", contactRoutes);
 
 // Global error handling
 app.use((err, req, res, next) => {

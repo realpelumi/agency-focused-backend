@@ -1,0 +1,28 @@
+services:
+  # Backend API Service
+  - type: web
+    name: backend-api
+    runtime: node
+    plan: free
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    
+    # Environment variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: CLIENT_ORIGIN
+        value: https://agency-focused.vercel.app
+    
+    # Auto-deploy configuration
+    autoDeploy: true
+    
+    # Build context
+    rootDir: .
+    
+    # Node.js version
+    nodeVersion: 24
